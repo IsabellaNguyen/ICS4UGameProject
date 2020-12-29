@@ -6,9 +6,11 @@
 package SummativeGame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
@@ -17,7 +19,7 @@ import javax.swing.SwingUtilities;
  * @author bella
  */
 public class MainUI extends javax.swing.JFrame {
-    public ImageIcon[] images;
+    ImageIcon[] images;
     java.net.URL correctItemURL = MainUI.class.getResource("KoyaEarr.png"); //image URL
     ImageIcon correctIcon = new ImageIcon(correctItemURL); //Creating image icon variable
     java.net.URL imageURL1 = MainUI.class.getResource("Chimmy.png");
@@ -31,9 +33,11 @@ public class MainUI extends javax.swing.JFrame {
     java.net.URL imageURL5 = MainUI.class.getResource("Tata.png");
     ImageIcon image5 = new ImageIcon(imageURL5);
     
-    public JLabel[] items;
+    JLabel[] items;
     ArrayList<Integer> answers = new ArrayList();
-    public ArrayList<Boolean> clicked=new ArrayList();
+    ArrayList<Boolean> clicked=new ArrayList();
+    JLabel[] stars;
+    boolean usedPowerUp=false;
     
     /**
      * Creates new form GamePage
@@ -42,11 +46,13 @@ public class MainUI extends javax.swing.JFrame {
         initComponents();
         ImageIcon[] images={correctIcon,image1,image2,image3,image4,image5};
         JLabel[] items = {jLabel1,jLabel2,jLabel3,jLabel4,jLabel5,jLabel6,jLabel7,jLabel8,jLabel9,jLabel10,jLabel11,jLabel12,jLabel13,jLabel14,jLabel15,jLabel16,jLabel17,jLabel18,jLabel19,jLabel20,jLabel21,jLabel22,jLabel23,jLabel24,jLabel25,jLabel26,jLabel27,jLabel28,jLabel29,jLabel30};
+        JLabel[] stars = {jLabel31, jLabel32, jLabel33, jLabel34, jLabel35};
         for (Object i : items) {
             clicked.add(false);
         }
         
-        GameClass game = new GameClass(items, answers,clicked,images);
+        GameClass game = new GameClass(items, answers,clicked,images, this, stars);
+        
         
         new Thread(new Runnable() { //Thread to make randomizeAnswers method run and update jPanel inside a for loop
         @Override
@@ -69,12 +75,9 @@ public class MainUI extends javax.swing.JFrame {
                 }
             }
             game.coverItems(); //cover the items right after the answers are randomized
-            
+            game.userPicksItem(); //check what item is clicked
         }
-        }).start();
-        
-        game.userPicksItem(); //check what item is clicked
-        
+        }).start(); 
     }
 
     /**
@@ -123,14 +126,15 @@ public class MainUI extends javax.swing.JFrame {
         jLabel33 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
         jLabel35 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        PowerUpButton = new javax.swing.JButton();
         jLabel36 = new javax.swing.JLabel();
+        gameText = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(820, 600));
         setMinimumSize(new java.awt.Dimension(820, 600));
 
-        jPanel1.setBackground(new java.awt.Color(153, 102, 255));
+        jPanel1.setBackground(new java.awt.Color(171, 209, 236));
         jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel1MouseClicked(evt);
@@ -299,63 +303,82 @@ public class MainUI extends javax.swing.JFrame {
                 .addContainerGap(47, Short.MAX_VALUE))
         );
 
-        jLabel31.setText("jLabel31");
+        jLabel31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
 
-        jLabel32.setText("jLabel32");
+        jLabel32.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
 
-        jLabel33.setText("jLabel33");
+        jLabel33.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
 
-        jLabel34.setText("jLabel34");
+        jLabel34.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
 
-        jLabel35.setText("jLabel35");
+        jLabel35.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
 
-        jButton2.setBackground(new java.awt.Color(255, 255, 255));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/ShookyPowerUp.png"))); // NOI18N
+        PowerUpButton.setBackground(new java.awt.Color(255, 255, 255));
+        PowerUpButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/ShookyPowerUp.png"))); // NOI18N
+        PowerUpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PowerUpButtonActionPerformed(evt);
+            }
+        });
 
-        jLabel36.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/Picture_GamePage_.png"))); // NOI18N
+        jLabel36.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/pixlr-bg-result.png"))); // NOI18N
+
+        gameText.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        gameText.setText("FIND KOYA'S EARS");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(118, 118, 118)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(181, 181, 181)
-                        .addComponent(jLabel31)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel32)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel33)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel34)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel35))
+                        .addComponent(jLabel36)
+                        .addGap(0, 80, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(216, 216, 216)
-                        .addComponent(jLabel36))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(217, Short.MAX_VALUE))
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel31)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel32)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel33)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel34)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel35)
+                                .addGap(56, 56, 56)
+                                .addComponent(gameText)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(PowerUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(35, 35, 35))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(81, 81, 81)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel31)
-                    .addComponent(jLabel32)
-                    .addComponent(jLabel33)
-                    .addComponent(jLabel34)
-                    .addComponent(jLabel35))
-                .addGap(50, 50, 50)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel36))
-                .addContainerGap(176, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(81, 81, 81)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel31)
+                            .addComponent(jLabel32)
+                            .addComponent(jLabel33)
+                            .addComponent(jLabel34)
+                            .addComponent(jLabel35))
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(gameText)
+                        .addGap(18, 18, 18)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PowerUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                .addComponent(jLabel36))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -375,6 +398,18 @@ public class MainUI extends javax.swing.JFrame {
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {                                     
         // TODO add your handling code here:  
     }                                    
+
+    private void PowerUpButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        //Initialize again because the private void method doesn't recognize that it's initialized in the contructor (any better way of doing this?)
+        ImageIcon[] images={correctIcon,image1,image2,image3,image4,image5};
+        JLabel[] items = {jLabel1,jLabel2,jLabel3,jLabel4,jLabel5,jLabel6,jLabel7,jLabel8,jLabel9,jLabel10,jLabel11,jLabel12,jLabel13,jLabel14,jLabel15,jLabel16,jLabel17,jLabel18,jLabel19,jLabel20,jLabel21,jLabel22,jLabel23,jLabel24,jLabel25,jLabel26,jLabel27,jLabel28,jLabel29,jLabel30};
+        
+        if (!usedPowerUp){
+            usedPowerUp=true;
+            PowerUpClass powerUp = new PowerUpClass(clicked, PowerUpButton, items, answers, images);
+            powerUp.usePowerUp();
+        }
+    }                                             
 
     /**
      * @param args the command line arguments
@@ -414,7 +449,8 @@ public class MainUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton PowerUpButton;
+    private javax.swing.JLabel gameText;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
