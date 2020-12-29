@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
@@ -17,21 +18,29 @@ import javax.swing.JLabel;
  * @author bella
  */
 public class GameClass {
-    ArrayList<Integer> answers = new ArrayList(); //instance variables
-    ArrayList<Boolean> alrClicked = new ArrayList();
-    JLabel[] items;
-    ImageIcon[] icons;
+    private ArrayList<Integer> answers = new ArrayList(); //instance variables
+    private ArrayList<Boolean> alrClicked = new ArrayList();
+    private final JLabel[] items;
+    private final ImageIcon[] icons;
+    private final JFrame mainFrame;
+    private final JLabel[] stars;
     
     int numOfCorrect; //other variables
     int correctItem=0;
-    java.net.URL backURL = MainUI.class.getResource("backIcon.png");
+    int correct=0;
+    int points=5;
+    java.net.URL backURL = GameClass.class.getResource("ImageOnBackk.png");
     ImageIcon backIcon = new ImageIcon(backURL);
+    java.net.URL noStarURL = GameClass.class.getResource("noStarImage.png");
+    ImageIcon noStarImage = new ImageIcon(noStarURL);
     
-    public GameClass(JLabel[] items, ArrayList answers, ArrayList alrClicked, ImageIcon[] icons){
+    public GameClass(JLabel[] items, ArrayList answers, ArrayList alrClicked, ImageIcon[] icons, JFrame frame, JLabel[] stars){
         this.items=items;
         this.answers=answers;        
         this.alrClicked=alrClicked;
         this.icons=icons;
+        mainFrame=frame;
+        this.stars=stars;
     }
     
     public void randomizeAnswers() throws InterruptedException{
@@ -77,7 +86,25 @@ public class GameClass {
                     if (alrClicked.get(p)==false){ //check if the item has been clicked before
                         alrClicked.set(p, true);
                         items[p].setIcon(icons[answers.get(p)]); //display clicked icon
-                        System.out.println(p); //TESTING
+                        if (answers.get(p)==correctItem){
+                            correct++;
+                            if (correct==2){
+                                mainFrame.dispose(); //dispose of the main frame
+                                TitlePage title = new TitlePage(); //CHANGE TO ENDING PAGE WHEN YOU MAKE IT THIS IS TESTING
+                                title.setVisible(true);
+                            }
+                        }
+                        else{
+                            points--;
+                            //for (int i=0 ; i<5-points ; i++){
+                            stars[points].setIcon(noStarImage);
+                            //}
+                            if (points==0){
+                                mainFrame.dispose();
+                                //CREATE AN ENDING PAGE
+                            }
+                        }
+                        
                     }
                     
                 }
