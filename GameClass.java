@@ -29,6 +29,7 @@ public class GameClass {
     int correctItem=0;
     int correct=0;
     int points=5;
+    static boolean used=false;
     java.net.URL backURL = GameClass.class.getResource("ImageOnBackk.png");
     ImageIcon backIcon = new ImageIcon(backURL);
     java.net.URL noStarURL = GameClass.class.getResource("noStarImage.png");
@@ -77,6 +78,10 @@ public class GameClass {
         }
     }
     
+    public static void getUsedPowerUp(boolean usedPowerUp){
+        used= usedPowerUp;
+    }
+    
     public void userPicksItem(){ //determine which item is clicked
         for (int i=0 ; i<items.length ; i++){ //scan each item
             final int p=i;
@@ -89,19 +94,20 @@ public class GameClass {
                         if (answers.get(p)==correctItem){
                             correct++;
                             if (correct==2){
+                                System.out.println(used);
                                 mainFrame.dispose(); //dispose of the main frame
-                                TitlePage title = new TitlePage(); //CHANGE TO ENDING PAGE WHEN YOU MAKE IT THIS IS TESTING
-                                title.setVisible(true);
+                                EndingPage endingPage = new EndingPage(points, used); //open ending page
+                                endingPage.setVisible(true);
                             }
                         }
                         else{
                             points--;
-                            //for (int i=0 ; i<5-points ; i++){
                             stars[points].setIcon(noStarImage);
-                            //}
                             if (points==0){
                                 mainFrame.dispose();
-                                //CREATE AN ENDING PAGE
+                                System.out.println(used);
+                                EndingPage endingPage = new EndingPage(points,used);
+                                endingPage.setVisible(true);
                             }
                         }
                         
