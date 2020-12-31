@@ -52,7 +52,7 @@ public class MainUI extends javax.swing.JFrame {
         }
         
         GameClass game = new GameClass(items, answers,clicked,images, this, stars);
-        
+        PowerUpClass powerUp = new PowerUpClass(clicked, PowerUpButton, items, answers, images);
         
         new Thread(new Runnable() { //Thread to make randomizeAnswers method run and update jPanel inside a for loop
         @Override
@@ -76,8 +76,11 @@ public class MainUI extends javax.swing.JFrame {
             }
             game.coverItems(); //cover the items right after the answers are randomized
             game.userPicksItem(); //check what item is clicked
+            powerUp.usePowerUp(); //check if the power up button was clicked
+            
         }
         }).start(); 
+        
     }
 
     /**
@@ -400,15 +403,7 @@ public class MainUI extends javax.swing.JFrame {
     }                                    
 
     private void PowerUpButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        //Initialize again because the private void method doesn't recognize that it's initialized in the contructor (any better way of doing this?)
-        ImageIcon[] images={correctIcon,image1,image2,image3,image4,image5};
-        JLabel[] items = {jLabel1,jLabel2,jLabel3,jLabel4,jLabel5,jLabel6,jLabel7,jLabel8,jLabel9,jLabel10,jLabel11,jLabel12,jLabel13,jLabel14,jLabel15,jLabel16,jLabel17,jLabel18,jLabel19,jLabel20,jLabel21,jLabel22,jLabel23,jLabel24,jLabel25,jLabel26,jLabel27,jLabel28,jLabel29,jLabel30};
         
-        if (!usedPowerUp){
-            usedPowerUp=true;
-            PowerUpClass powerUp = new PowerUpClass(clicked, PowerUpButton, items, answers, images);
-            powerUp.usePowerUp();
-        }
     }                                             
 
     /**
