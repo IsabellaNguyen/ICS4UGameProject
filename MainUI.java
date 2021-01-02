@@ -5,6 +5,8 @@
  */
 package SummativeGame;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -13,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 /**
  *
@@ -38,6 +41,9 @@ public class MainUI extends javax.swing.JFrame {
     ArrayList<Boolean> clicked=new ArrayList();
     JLabel[] stars;
     boolean usedPowerUp=false;
+    static int itemClick=-1;
+    static int pointss=-1;
+    Timer timer;
     
     /**
      * Creates new form GamePage
@@ -51,8 +57,8 @@ public class MainUI extends javax.swing.JFrame {
             clicked.add(false);
         }
         
-        GameClass game = new GameClass(items, answers,clicked,images, this, stars);
-        PowerUpClass powerUp = new PowerUpClass(clicked, PowerUpButton, items, answers, images);
+        GameClass game = new GameClass(items, answers,clicked,images, this, stars, gameText);
+        PowerUpClass powerUp = new PowerUpClass(clicked, PowerUpButton, items, answers, images, gameText);
         
         new Thread(new Runnable() { //Thread to make randomizeAnswers method run and update jPanel inside a for loop
         @Override
@@ -76,13 +82,34 @@ public class MainUI extends javax.swing.JFrame {
             }
             game.coverItems(); //cover the items right after the answers are randomized
             game.userPicksItem(); //check what item is clicked
+               
+            ActionListener action = new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent event)
+                {
+                    if (itemClick==2 || pointss==0){
+                        game.openEnd();
+                        timer.stop();
+                        itemClick=-1; //initialize in case user replays te game
+                        pointss=-1;
+                    }
+                }
+            };
+            timer= new Timer (600,action);
+            timer.start();
+            
             powerUp.usePowerUp(); //check if the power up button was clicked
             
         }
         }).start(); 
         
     }
-
+    
+    public static void itemClicked(int correct, int points){ //get the current status of how many the user got correct from the GameClass
+        itemClick=correct;
+        pointss=points;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -351,7 +378,7 @@ public class MainUI extends javax.swing.JFrame {
                                 .addComponent(jLabel34)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel35)
-                                .addGap(56, 56, 56)
+                                .addGap(30, 30, 30)
                                 .addComponent(gameText)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
