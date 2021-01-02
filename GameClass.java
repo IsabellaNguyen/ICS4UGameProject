@@ -9,6 +9,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,6 +26,7 @@ public class GameClass {
     private final ImageIcon[] icons;
     private final JFrame mainFrame;
     private final JLabel[] stars;
+    private final JLabel text;
     
     int numOfCorrect; //other variables
     int correctItem=0;
@@ -35,13 +38,14 @@ public class GameClass {
     java.net.URL noStarURL = GameClass.class.getResource("noStarImage.png");
     ImageIcon noStarImage = new ImageIcon(noStarURL);
     
-    public GameClass(JLabel[] items, ArrayList answers, ArrayList alrClicked, ImageIcon[] icons, JFrame frame, JLabel[] stars){
+    public GameClass(JLabel[] items, ArrayList answers, ArrayList alrClicked, ImageIcon[] icons, JFrame frame, JLabel[] stars, JLabel text){
         this.items=items;
         this.answers=answers;        
         this.alrClicked=alrClicked;
         this.icons=icons;
         mainFrame=frame;
         this.stars=stars;
+        this.text=text;
     }
     
     public void randomizeAnswers() throws InterruptedException{
@@ -94,27 +98,40 @@ public class GameClass {
                         if (answers.get(p)==correctItem){
                             correct++;
                             if (correct==2){
-                                System.out.println(used);
-                                mainFrame.dispose(); //dispose of the main frame
+                                text.setText("YOU FOUND BOTH OF KOYA'S EARS!");
+                                /*mainFrame.dispose(); //dispose of the main frame
                                 EndingPage endingPage = new EndingPage(points, used); //open ending page
-                                endingPage.setVisible(true);
+                                endingPage.setVisible(true);*/
+                            }
+                            else{
+                                text.setText("YOU FOUND ONE!");
                             }
                         }
                         else{
                             points--;
                             stars[points].setIcon(noStarImage);
                             if (points==0){
-                                mainFrame.dispose();
-                                System.out.println(used);
+                                text.setText("TRY AGAIN NEXT TIME");
+                                /*mainFrame.dispose();
                                 EndingPage endingPage = new EndingPage(points,used);
-                                endingPage.setVisible(true);
+                                endingPage.setVisible(true);*/
+                            }
+                            else{
+                                text.setText("NOT QUITE");
                             }
                         }
                         
                     }
-                    
+                    MainUI.itemClicked(correct, points);
                 }
             });
         }
     }
+    
+    public void openEnd(){
+        mainFrame.dispose(); //dispose of the main frame
+        EndingPage endingPage = new EndingPage(points, used); //open ending page
+        endingPage.setVisible(true);
+    }
+    
 }
