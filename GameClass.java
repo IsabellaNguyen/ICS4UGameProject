@@ -198,7 +198,25 @@ public class GameClass {
                     MainUI.isEvilClicked(isEvil);
                     isEvil=false;
                     SettingsClass.gameData(alrClicked, answers, points, correct);
-                    System.out.println(points + " points");
+                    BufferedWriter dataFile;
+                    try {
+                        dataFile = new BufferedWriter(new FileWriter("data.txt",true));
+                        BufferedWriter data = Files.newBufferedWriter(Paths.get("data.txt")); 
+                        data.write("");
+                        data.flush();
+
+                        dataFile.write("points"+"\n");
+                        dataFile.write(points+"\n");
+
+                        dataFile.write("power"+"\n");
+                        dataFile.write(used+"\n");
+
+                        dataFile.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(GameClass.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    //System.out.println(points + " points");
                 }
             });
         }
@@ -217,8 +235,31 @@ public class GameClass {
         
     }
         
-    public void openEnd() throws IOException{
-        mainFrame.dispose(); //dispose of the main frame
+    public void openEnd() {
+        File file = new File("data.txt"); 
+        Scanner scan;
+        try {
+            scan = new Scanner(file);
+            while (scan.hasNextLine()){
+                String str = scan.nextLine();
+                if (str.equals("points")){
+                    points=scan.nextInt();
+                }
+                else if (str.equals("power")){
+                    used=scan.nextBoolean();
+                }
+            }
+            //System.out.println(points + " " + correct);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //mainFrame.dispose(); //dispose of the main frame
+        java.awt.Window win[] = java.awt.Window.getWindows(); 
+        for(int i=0;i<win.length;i++){ 
+            win[i].dispose(); 
+            win[i]=null;
+        } 
         EndingPage endingPage = new EndingPage(points, used); //open ending page
         endingPage.setVisible(true);
         MainUI.started=false;
