@@ -15,13 +15,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -70,15 +67,13 @@ public class MainUI extends javax.swing.JFrame {
         JLabel[] items = {jLabel1,jLabel2,jLabel3,jLabel4,jLabel5,jLabel6,jLabel7,jLabel8,jLabel9,jLabel10,jLabel11,jLabel12,jLabel13,jLabel14,jLabel15,jLabel16,jLabel17,jLabel18,jLabel19,jLabel20,jLabel21,jLabel22,jLabel23,jLabel24,jLabel25,jLabel26,jLabel27,jLabel28,jLabel29,jLabel30};
         JLabel[] stars = {jLabel31, jLabel32, jLabel33, jLabel34, jLabel35, extraStar};
         
-        settingsPanel.setVisible(false);
-        
         for (int i=0 ; i<items.length ; i++){
             clicked.add(false);
         }
         
         if (!started){
             try {
-                text();
+                text(); //initialize variables if it's a new game
             } catch (IOException ex) {
                 Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -94,22 +89,20 @@ public class MainUI extends javax.swing.JFrame {
                     for (int i=0 ; i<items.length ; i++){
                         clicked.set(i, scan.nextBoolean());
                     }
-                    System.out.println("new"+clicked);
                 }
                 else if (str.equals("answers")){
                     for (int i=0 ; i<items.length ; i++){
                         answers.add(scan.nextInt());
                     }
-                    System.out.println("new"+answers);
                 }
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        GameClass game = new GameClass(items, answers,clicked,images, this , stars, gameText, extraStar);
+        GameClass game = new GameClass(items, answers,clicked,images, stars, gameText, extraStar);
         PowerUpClass powerUp = new PowerUpClass(clicked, PowerUpButton, items, answers, images, gameText);
-        SettingsClass settings = new SettingsClass (settingsIcon, restartButton, helpButton, exitButton, resumeButton, this, settingsPanel);
+        SettingsClass settings = new SettingsClass (restartLabel, helpLabel, exitLabel, this);
         
         new Thread(new Runnable() { //Thread to make randomizeAnswers method run and update jPanel inside a for loop
         @Override
@@ -122,7 +115,7 @@ public class MainUI extends javax.swing.JFrame {
             }
             else{
                 
-            for (int i=0; i<15; i++) { //run method 15 times
+            for (int i=0; i<17; i++) { //run method 17 times
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -130,7 +123,7 @@ public class MainUI extends javax.swing.JFrame {
                     }
                 });
                 try{ 
-                    Thread.sleep(100); 
+                    Thread.sleep(95); 
                 } 
                 catch (InterruptedException e) {
                 }
@@ -138,7 +131,6 @@ public class MainUI extends javax.swing.JFrame {
             game.coverItems(); //cover the items right after the answers are randomized
             }
             game.userPicksItem(); //check what item is clicked
-            System.out.println(answers);
             
             ActionListener action = new ActionListener(){
                 @Override
@@ -147,7 +139,6 @@ public class MainUI extends javax.swing.JFrame {
                     if (itemClick==2 || pointss==0){
                         //timer.restart();
                         timer.stop();
-                        //closeFrame();
                         game.openEnd();
                         itemClick=-1; //initialize in case user replays the game
                         pointss=-1;
@@ -179,27 +170,10 @@ public class MainUI extends javax.swing.JFrame {
         
     }
     
-    public static void itemClicked(int correct, int points){ //get the current status of how many the user got correct from the GameClass
-        itemClick=correct;
-        pointss=points;
-    }
-    
-    public static void isEvilClicked(boolean evil){
-        evilK=evil;
-    }
-    
-    public static void start (boolean start){
-        started=start;
-    }
-    
-    private void closeFrame (){
-        this.dispose();
-    }
-    
     private void text() throws IOException {
         BufferedWriter dataFile = new BufferedWriter(new FileWriter("data.txt",true));
         BufferedWriter data = Files.newBufferedWriter(Paths.get("data.txt"));
-        data.write("");
+        data.write(""); //clear file
         data.flush();
         dataFile.write("clicked"+"\n"); //write an initial value for clicked arraylist
         for (Boolean click : clicked){
@@ -268,12 +242,9 @@ public class MainUI extends javax.swing.JFrame {
         jLabel36 = new javax.swing.JLabel();
         gameText = new javax.swing.JLabel();
         extraStar = new javax.swing.JLabel();
-        settingsPanel = new javax.swing.JPanel();
-        restartButton = new javax.swing.JButton();
-        helpButton = new javax.swing.JButton();
-        exitButton = new javax.swing.JButton();
-        resumeButton = new javax.swing.JButton();
-        settingsIcon = new javax.swing.JLabel();
+        restartLabel = new javax.swing.JLabel();
+        helpLabel = new javax.swing.JLabel();
+        exitLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(820, 600));
@@ -469,113 +440,60 @@ public class MainUI extends javax.swing.JFrame {
         jLabel36.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/pixlr-bg-result.png"))); // NOI18N
 
         gameText.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        gameText.setText("FIND KOYA'S EARS");
+        gameText.setText("TEXT");
 
         extraStar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
 
-        settingsPanel.setBackground(new java.awt.Color(171, 209, 236));
+        restartLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        restartLabel.setText("RESTART");
 
-        restartButton.setBackground(new java.awt.Color(255, 153, 255));
-        restartButton.setText("Restart");
+        helpLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        helpLabel.setText("HELP");
 
-        helpButton.setBackground(new java.awt.Color(255, 153, 255));
-        helpButton.setText("Help");
-
-        exitButton.setBackground(new java.awt.Color(255, 153, 255));
-        exitButton.setText("Exit");
-
-        resumeButton.setBackground(new java.awt.Color(255, 153, 255));
-        resumeButton.setText("Resume");
-
-        javax.swing.GroupLayout settingsPanelLayout = new javax.swing.GroupLayout(settingsPanel);
-        settingsPanel.setLayout(settingsPanelLayout);
-        settingsPanelLayout.setHorizontalGroup(
-            settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(settingsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addGroup(settingsPanelLayout.createSequentialGroup()
-                        .addComponent(exitButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(resumeButton))
-                    .addGroup(settingsPanelLayout.createSequentialGroup()
-                        .addComponent(restartButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(helpButton)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        settingsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {exitButton, helpButton, restartButton, resumeButton});
-
-        settingsPanelLayout.setVerticalGroup(
-            settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(settingsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(restartButton)
-                    .addComponent(helpButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(resumeButton)
-                    .addComponent(exitButton))
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-
-        settingsIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/settings.png"))); // NOI18N
+        exitLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        exitLabel.setText("EXIT");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel36)
+                .addContainerGap(115, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel36)
-                        .addGap(0, 115, Short.MAX_VALUE))
+                        .addComponent(jLabel31)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel32)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel33)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel34)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel35)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(extraStar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gameText)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 374, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel31)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel32)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel33)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel34)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel35)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(extraStar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(gameText)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 256, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(settingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(settingsIcon)
-                                        .addGap(20, 20, 20))))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(PowerUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(25, 25, 25)))))
-                .addContainerGap())
+                            .addComponent(PowerUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(restartLabel)
+                            .addComponent(helpLabel)
+                            .addComponent(exitLabel))))
+                .addGap(25, 25, 25))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(settingsIcon))
-                            .addComponent(settingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(8, 8, 8)
+                        .addGap(20, 20, 20)
                         .addComponent(gameText)
                         .addGap(18, 18, 18))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -591,8 +509,15 @@ public class MainUI extends javax.swing.JFrame {
                         .addGap(21, 21, 21)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PowerUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(PowerUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(restartLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(helpLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(exitLabel)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
                 .addComponent(jLabel36))
         );
 
@@ -657,10 +582,10 @@ public class MainUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton PowerUpButton;
-    private javax.swing.JButton exitButton;
+    private javax.swing.JLabel exitLabel;
     private javax.swing.JLabel extraStar;
     private javax.swing.JLabel gameText;
-    private javax.swing.JButton helpButton;
+    private javax.swing.JLabel helpLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -699,9 +624,6 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JButton restartButton;
-    private javax.swing.JButton resumeButton;
-    private javax.swing.JLabel settingsIcon;
-    private javax.swing.JPanel settingsPanel;
+    private javax.swing.JLabel restartLabel;
     // End of variables declaration//GEN-END:variables
 }

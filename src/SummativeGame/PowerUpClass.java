@@ -35,7 +35,6 @@ public class PowerUpClass {
     int correctItem=0;
     int present=6;
     int evil=7;
-    static boolean isEvil=false;
     
     public PowerUpClass(ArrayList alrClicked, JButton powerUp, JLabel[] items, ArrayList answers, ImageIcon[] icons, JLabel text){
         this.alrClicked=alrClicked;
@@ -52,26 +51,37 @@ public class PowerUpClass {
             while (scan.hasNextLine()){
                 String str = scan.nextLine();
                 if (str.equals("power")){
-                    usedPowerUp=scan.nextBoolean();
+                    usedPowerUp=scan.nextBoolean(); //initialize variable from text file
                 }
             }
-            System.out.println(usedPowerUp);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public void usePowerUp(){
-        GameClass.getUsedPowerUp(usedPowerUp); //Reset after each game
-        SettingsClass.gameDataP(usedPowerUp);
+        GameClass.used=usedPowerUp; //Reset after each game
+        SettingsClass.usedPowerUp=usedPowerUp; //Reset after each game
         powerUp.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e){ //hovering mouse
+                if (!usedPowerUp){
+                    powerUp.setBackground(new Color (144, 144, 144));
+                }
+            }
+            @Override
+            public void mouseExited(MouseEvent e){ //hovering mouse exit
+                if (!usedPowerUp){
+                    powerUp.setBackground(Color.WHITE);
+                }
+            }
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (!usedPowerUp){
-                    MainUI.isEvilClicked(isEvil); //not the evil item
+                    MainUI.evilK=false; //not the evil item
                     usedPowerUp=true;
-                    GameClass.getUsedPowerUp(usedPowerUp);
-                    SettingsClass.gameDataP(usedPowerUp);
+                    GameClass.used=usedPowerUp; //tell other classes the powerUp has been used
+                    SettingsClass.usedPowerUp=usedPowerUp;
                     text.setText("SHOOKY HELP!!!");
                     powerUp.setBackground(Color.red); //change background so user knows they've used the powerup already
                     int min=3;

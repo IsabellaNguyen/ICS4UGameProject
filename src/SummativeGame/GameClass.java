@@ -32,7 +32,6 @@ public class GameClass {
     private ArrayList<Boolean> alrClicked = new ArrayList();
     private final JLabel[] items;
     private final ImageIcon[] icons;
-    private final JFrame mainFrame;
     private final JLabel[] stars;
     private final JLabel text;
     private final JLabel extraStar;
@@ -50,13 +49,14 @@ public class GameClass {
     ImageIcon noStarImage = new ImageIcon(noStarURL);
     java.net.URL starURL = GameClass.class.getResource("star.png");
     ImageIcon star = new ImageIcon(starURL);
+    java.net.URL backMouseURL = GameClass.class.getResource("ImageOnBackDark.png");
+    ImageIcon backMouse = new ImageIcon(backMouseURL);
     
-    public GameClass(JLabel[] items, ArrayList answers, ArrayList alrClicked, ImageIcon[] icons, JFrame frame, JLabel[] stars, JLabel text, JLabel extraStar){
+    public GameClass(JLabel[] items, ArrayList answers, ArrayList alrClicked, ImageIcon[] icons, JLabel[] stars, JLabel text, JLabel extraStar){
         this.items=items;
         this.answers=answers;        
         this.alrClicked=alrClicked;
         this.icons=icons;
-        mainFrame=frame;
         this.stars=stars;
         this.text=text;
         this.extraStar=extraStar;
@@ -67,14 +67,13 @@ public class GameClass {
             scan = new Scanner(file);
             while (scan.hasNextLine()){
                 String str = scan.nextLine();
-                if (str.equals("points")){
+                if (str.equals("points")){ //initalize the necessary variables via text file
                     points=scan.nextInt();
                 }
                 else if (str.equals("correct")){
                     correct=scan.nextInt();
                 }
             }
-            System.out.println(points + " " + correct);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -87,6 +86,7 @@ public class GameClass {
         numOfCorrect=0;
         numOfPresent=0;
         numOfEvil=0;
+        text.setText("DON'T BLINK!!!");
         for (int i=0 ; i<items.length ; i++){
             int ans = rand.nextInt(8);
             if (ans==correctItem){ //Check if the random number is the correct item
@@ -122,18 +122,18 @@ public class GameClass {
             items[i].setIcon(icons[answers.get(i)]);
 
         }
-        SettingsClass.gameData(alrClicked, answers, points, correct); //in case the user clicks the help button before clicking any buttons
-            
+        //in case the user clicks the help button before clicking any buttons
+        SettingsClass.alrClicked=alrClicked;
+        SettingsClass.answers=answers;
+        SettingsClass.points=points;
+        SettingsClass.correct=correct;
     }
     
     public void coverItems(){ //Cover items with square
         for (JLabel item : items) {
             item.setIcon(backIcon);
         }
-    }
-    
-    public static void getUsedPowerUp(boolean usedPowerUp){
-        used= usedPowerUp;
+        text.setText("FIND KOYA'S EARS");
     }
     
     public void userPicksItem(){ //determine which item is clicked
@@ -142,8 +142,19 @@ public class GameClass {
             final int p=i;
             items[i].addMouseListener(new MouseAdapter() {
                 @Override
+                public void mouseEntered(MouseEvent evt) { //hovering mouse
+                    if (alrClicked.get(p)==false){
+                        items[p].setIcon(backMouse);
+                    }
+                }
+                @Override
+                public void mouseExited(MouseEvent evt){ //hovering mouse leaves
+                    if (alrClicked.get(p)==false){
+                        items[p].setIcon(backIcon);
+                    }
+                }
+                @Override
                 public void mouseClicked(MouseEvent e) {
-                    //started=true;
                     if (alrClicked.get(p)==false){ //check if the item has been clicked before
                         alrClicked.set(p, true);
                         items[p].setIcon(icons[answers.get(p)]); //display clicked icon
@@ -182,7 +193,7 @@ public class GameClass {
                             points--;
                             stars[points].setIcon(noStarImage);
                         }
-                        else{
+                        else{ //User chose a normal item
                             points--;
                             stars[points].setIcon(noStarImage);
                             if (points==0){
@@ -192,19 +203,24 @@ public class GameClass {
                                 text.setText("NOT QUITE");
                             }
                         }
-                        
                     }
-                    MainUI.itemClicked(correct, points);
-                    MainUI.isEvilClicked(isEvil);
-                    isEvil=false;
-                    SettingsClass.gameData(alrClicked, answers, points, correct);
+                    //update variables in other classes according to user's choices
+                    MainUI.itemClick=correct;
+                    MainUI.pointss=points;
+                    MainUI.evilK=isEvil;
+                    isEvil=false; //reset
+                    SettingsClass.alrClicked=alrClicked;
+                    SettingsClass.answers=answers;
+                    SettingsClass.points=points;
+                    SettingsClass.correct=correct;
                     BufferedWriter dataFile;
                     try {
                         dataFile = new BufferedWriter(new FileWriter("data.txt",true));
                         BufferedWriter data = Files.newBufferedWriter(Paths.get("data.txt")); 
-                        data.write("");
+                        data.write(""); //clear data
                         data.flush();
-
+                        
+                        //Write in points and used because the ending page needs these variables
                         dataFile.write("points"+"\n");
                         dataFile.write(points+"\n");
 
@@ -215,24 +231,21 @@ public class GameClass {
                     } catch (IOException ex) {
                         Logger.getLogger(GameClass.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
-                    //System.out.println(points + " points");
                 }
             });
         }
     }
     
-    public void startedGame(){
+    public void startedGame(){ //for if user already started the game (left to see instructions and came back)
         for (int i=0 ; i<items.length ; i++){
             items[i].setText("");
             if (alrClicked.get(i)){
-                items[i].setIcon(icons[answers.get(i)]);
+                items[i].setIcon(icons[answers.get(i)]); //draw the items that were already clicked
             }
         }
         for (int i=5 ; i>points-1 ; i--){
-            stars[i].setIcon(noStarImage);
+            stars[i].setIcon(noStarImage); //also draw in the stars/points
         }
-        
     }
         
     public void openEnd() {
@@ -242,23 +255,21 @@ public class GameClass {
             scan = new Scanner(file);
             while (scan.hasNextLine()){
                 String str = scan.nextLine();
-                if (str.equals("points")){
+                if (str.equals("points")){ //scan the points 
                     points=scan.nextInt();
                 }
-                else if (str.equals("power")){
+                else if (str.equals("power")){ //scan if user already used power up
                     used=scan.nextBoolean();
                 }
             }
-            //System.out.println(points + " " + correct);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        //mainFrame.dispose(); //dispose of the main frame
-        java.awt.Window win[] = java.awt.Window.getWindows(); 
-        for(int i=0;i<win.length;i++){ 
-            win[i].dispose(); 
-            win[i]=null;
+        java.awt.Window window[] = java.awt.Window.getWindows(); //this is to close all windows in case they don't close
+        for(int i=0;i<window.length;i++){ 
+            window[i].dispose(); 
+            //window[i]=null;
         } 
         EndingPage endingPage = new EndingPage(points, used); //open ending page
         endingPage.setVisible(true);
