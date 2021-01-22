@@ -79,20 +79,21 @@ public class MainUI extends javax.swing.JFrame {
             }
         }
         
+        //Set the necessary variables to the values in the file since it's possible that the user left and came back
         File file = new File("data.txt"); 
         Scanner scan;
         try {
             scan = new Scanner(file);
             while (scan.hasNextLine()){
                 String str = scan.nextLine();
-                if (str.equals("clicked")){
+                if (str.equals("clicked")){ //find the line that says "clicked" to read the following correct values
                     for (int i=0 ; i<items.length ; i++){
-                        clicked.set(i, scan.nextBoolean());
+                        clicked.set(i, scan.nextBoolean()); //update the array to the values in the file
                     }
                 }
-                else if (str.equals("answers")){
+                else if (str.equals("answers")){ //find the line that says "answers" to read the following correct values
                     for (int i=0 ; i<items.length ; i++){
-                        answers.add(scan.nextInt());
+                        answers.add(scan.nextInt()); //update the array
                     }
                 }
             }
@@ -156,7 +157,6 @@ public class MainUI extends javax.swing.JFrame {
                         eTimer.restart();
                         game.coverItems();
                         //eTimer.stop();
-                        
                     }
                 }
             };
@@ -164,10 +164,9 @@ public class MainUI extends javax.swing.JFrame {
             eTimer.start();
 
             powerUp.usePowerUp(); //check if the power up button was clicked
-            settings.settings();
+            settings.settings(); //Check if the settings buttons were clicked
         }
         }).start();
-        
     }
     
     private void text() throws IOException {
