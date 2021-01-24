@@ -22,22 +22,24 @@ public class EndingPage extends javax.swing.JFrame {
     JLabel[] stars;
     /**
      * Creates new form EndingPage
+     * @param points
+     * @param usedPowerUp
      */
     public EndingPage(int points, boolean usedPowerUp) {
         initComponents();
-        JLabel[] stars = {jLabel2,jLabel3,jLabel4, jLabel5, jLabel6};
-        if (points==0){
+        JLabel[] stars = {star1,star2,star3, star4, star5};
+        if (points==0){ //User lost the game
             image.setIcon(sadEnding);
             image.setText("");
             title.setText("Try Again");
         }
-        else{
+        else{ //User won the game
             title.setText("Congratulations!");
         }
-        for (int i=4 ; i>points-1 ; i--){
+        for (int i=4 ; i>points-1 ; i--){ //set all the stars to the correct points
             stars[i].setIcon(noStarImage);
         }
-        if (usedPowerUp || points==0){
+        if (usedPowerUp || points==0){ //set the bonus star to empty if the user used the power up or lost
           bonusStar.setIcon(noBonus);
           bonusText.setText("No bonus star :(");
         }
@@ -61,11 +63,11 @@ public class EndingPage extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         image = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        star1 = new javax.swing.JLabel();
+        star2 = new javax.swing.JLabel();
+        star3 = new javax.swing.JLabel();
+        star4 = new javax.swing.JLabel();
+        star5 = new javax.swing.JLabel();
         playButton = new javax.swing.JButton();
         exitButton = new javax.swing.JButton();
         bonusStar = new javax.swing.JLabel();
@@ -83,16 +85,17 @@ public class EndingPage extends javax.swing.JFrame {
 
         image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/goodEnding.png"))); // NOI18N
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
+        star1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
+        star2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
+        star3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
+        star4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
+        star5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/star.png"))); // NOI18N
 
+        playButton.setBackground(new java.awt.Color(204, 204, 204));
         playButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         playButton.setText("REPLAY");
         playButton.addActionListener(new java.awt.event.ActionListener() {
@@ -101,6 +104,7 @@ public class EndingPage extends javax.swing.JFrame {
             }
         });
 
+        exitButton.setBackground(new java.awt.Color(204, 204, 204));
         exitButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         exitButton.setText("EXIT");
         exitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -130,15 +134,15 @@ public class EndingPage extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(star1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
+                        .addComponent(star2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
+                        .addComponent(star3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5)
+                        .addComponent(star4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6)
+                        .addComponent(star5)
                         .addGap(180, 180, 180))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(playButton)
@@ -154,12 +158,12 @@ public class EndingPage extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(star1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3)
-                        .addComponent(jLabel4)
-                        .addComponent(jLabel5)
-                        .addComponent(jLabel6)))
+                        .addComponent(star2)
+                        .addComponent(star3)
+                        .addComponent(star4)
+                        .addComponent(star5)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(67, 67, 67)
@@ -184,18 +188,20 @@ public class EndingPage extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(84, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(84, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(title))
+                .addComponent(title)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(60, 60, 60)
+                .addGap(53, 53, 53)
                 .addComponent(title)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(50, Short.MAX_VALUE))
         );
@@ -266,14 +272,14 @@ public class EndingPage extends javax.swing.JFrame {
     private javax.swing.JLabel bonusText;
     private javax.swing.JButton exitButton;
     private javax.swing.JLabel image;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JButton playButton;
+    private javax.swing.JLabel star1;
+    private javax.swing.JLabel star2;
+    private javax.swing.JLabel star3;
+    private javax.swing.JLabel star4;
+    private javax.swing.JLabel star5;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 }

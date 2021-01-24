@@ -279,6 +279,7 @@ public class InstructionsPage extends javax.swing.JFrame {
 
         jLabel31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/instructionspic.png"))); // NOI18N
 
+        storyButton.setBackground(new java.awt.Color(255, 255, 255));
         storyButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         storyButton.setText("STORY");
         storyButton.addActionListener(new java.awt.event.ActionListener() {

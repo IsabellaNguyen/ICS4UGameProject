@@ -5,6 +5,7 @@
  */
 package SummativeGame;
 
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
@@ -20,7 +21,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
@@ -112,10 +112,27 @@ public class GameClass {
             }
             answers.add(ans);
         }
-        if (numOfCorrect<2){ //does this even work 
-                int place=rand.nextInt(30);
-                answers.set(place, 0);
-            }
+        System.out.println(answers);
+        switch (numOfCorrect){
+            case(0):
+                System.out.println("yes");
+              int place=rand.nextInt(30);
+                answers.set(place, 0); 
+            case(1):
+                System.out.println("yes2");
+                int place2=rand.nextInt(30);
+                answers.set(place2, 0);
+        }
+        /*if (numOfCorrect==0){ //In the rare case the random generator does not include any correct items
+            int place=rand.nextInt(30);
+            answers.set(place, 0);
+            numOfCorrect++;
+        }
+        if (numOfCorrect==1){ //In case random generator includes only one correct item
+            int place=rand.nextInt(30);
+            answers.set(place, 0);
+        }*/
+        System.out.println("n"+answers);
 
         for(int i=0;i<items.length;i++){ //display the answers
             items[i].setText("");
@@ -251,6 +268,7 @@ public class GameClass {
     public void openEnd() {
         File file = new File("data.txt"); 
         Scanner scan;
+        //Update the necessary variables to pass onto the EndingPage
         try {
             scan = new Scanner(file);
             while (scan.hasNextLine()){
@@ -267,9 +285,8 @@ public class GameClass {
         }
         
         java.awt.Window window[] = java.awt.Window.getWindows(); //this is to close all windows in case they don't close
-        for(int i=0;i<window.length;i++){ 
-            window[i].dispose(); 
-            //window[i]=null;
+        for (Window window1 : window) {
+            window1.dispose();
         } 
         EndingPage endingPage = new EndingPage(points, used); //open ending page
         endingPage.setVisible(true);
