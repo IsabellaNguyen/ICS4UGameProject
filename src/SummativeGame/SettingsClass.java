@@ -56,6 +56,7 @@ public class SettingsClass {
             @Override
             public void mouseClicked(MouseEvent e) {
                 MainUI.started=false; //start new game
+                MainUI.gameTimer.stop();
                 mainFrame.dispose();
                 TitlePage title = new TitlePage();
                 title.setVisible(true);
@@ -78,6 +79,7 @@ public class SettingsClass {
                     Logger.getLogger(SettingsClass.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 MainUI.started=true; //make sure to continue progress
+                MainUI.gameTimer.stop();
                 mainFrame.dispose();
                 InstructionsPage instructions = new InstructionsPage();
                 instructions.setVisible(true);
@@ -124,6 +126,9 @@ public class SettingsClass {
         
         dataFile.write("power"+"\n");
         dataFile.write(usedPowerUp+"\n");
+        
+        dataFile.write("timer"+"\n");
+        dataFile.write(MainUI.counter+"\n");
         
         dataFile.close();
     }

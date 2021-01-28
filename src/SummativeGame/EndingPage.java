@@ -19,16 +19,16 @@ public class EndingPage extends javax.swing.JFrame {
     ImageIcon noBonus = new ImageIcon(noBonusURL);
     java.net.URL sadEndingURL = EndingPage.class.getResource("failEnding.png");
     ImageIcon sadEnding = new ImageIcon(sadEndingURL);
-    JLabel[] stars;
     /**
      * Creates new form EndingPage
      * @param points
      * @param usedPowerUp
+     * @param counter
      */
-    public EndingPage(int points, boolean usedPowerUp) {
+    public EndingPage(int points, boolean usedPowerUp, int counter) {
         initComponents();
         JLabel[] stars = {star1,star2,star3, star4, star5};
-        if (points==0){ //User lost the game
+        if (points==0 || counter==0){ //User lost the game
             image.setIcon(sadEnding);
             image.setText("");
             title.setText("Try Again");
@@ -39,7 +39,7 @@ public class EndingPage extends javax.swing.JFrame {
         for (int i=4 ; i>points-1 ; i--){ //set all the stars to the correct points
             stars[i].setIcon(noStarImage);
         }
-        if (usedPowerUp || points==0){ //set the bonus star to empty if the user used the power up or lost
+        if (usedPowerUp || points==0 || counter==0){ //set the bonus star to empty if the user used the power up or lost
           bonusStar.setIcon(noBonus);
           bonusText.setText("No bonus star :(");
         }
@@ -191,7 +191,7 @@ public class EndingPage extends javax.swing.JFrame {
                 .addContainerGap(84, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(84, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(title)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -199,9 +199,9 @@ public class EndingPage extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addGap(60, 60, 60)
                 .addComponent(title)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(50, Short.MAX_VALUE))
         );

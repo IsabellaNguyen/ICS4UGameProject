@@ -5,6 +5,7 @@
  */
 package SummativeGame;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -20,15 +21,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 
 /**
  *
  * @author bella
  */
 public class MainUI extends javax.swing.JFrame {
-    ImageIcon[] images;
     java.net.URL correctItemURL = MainUI.class.getResource("KoyaEarr.png"); //image URL
     ImageIcon correctIcon = new ImageIcon(correctItemURL); //Creating image icon variable
     java.net.URL imageURL1 = MainUI.class.getResource("Chimmy.png");
@@ -48,15 +50,15 @@ public class MainUI extends javax.swing.JFrame {
     java.net.URL noStarURL = GameClass.class.getResource("noStarImage.png");
     ImageIcon noStarImage = new ImageIcon(noStarURL);
     
-    JLabel[] items;
     ArrayList<Integer> answers = new ArrayList();
     ArrayList<Boolean> clicked=new ArrayList();
-    JLabel[] stars;
     boolean usedPowerUp=false;
     static boolean evilK, started=false;
     static int itemClick=-1;
     static int pointss=-1;
+    static int counter=10;
     Timer timer,eTimer;
+    static Timer gameTimer;
     
     /**
      * Creates new form GamePage
@@ -66,6 +68,7 @@ public class MainUI extends javax.swing.JFrame {
         ImageIcon[] images={correctIcon,image1,image2,image3,image4,image5, present, evil}; //array for different types of icons
         JLabel[] items = {item1,item2,item3,item4,item5,item6,item7,item8,item9,item10,item11,item12,item13,item14,item15,item16,item17,item18,item19,item20,item21,item22,item23,item24,item25,item26,item27,item28,item29,item30};
         JLabel[] stars = {star1, star2, star3, star4, star5, extraStar};
+        timerText.setText("");
         
         for (int i=0 ; i<items.length ; i++){
             clicked.add(false);
@@ -96,6 +99,9 @@ public class MainUI extends javax.swing.JFrame {
                         answers.add(scan.nextInt()); //update the array
                     }
                 }
+                else if (str.equals("timer")){
+                    counter=scan.nextInt();
+                }
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,11 +114,11 @@ public class MainUI extends javax.swing.JFrame {
         new Thread(new Runnable() { //Thread to make randomizeAnswers method run and update jPanel inside a for loop
         @Override
         public void run() {
-            
-            if (started){
+            if (started){ //set the game to how the user's progress
                 game.coverItems();
                 game.startedGame();
                 powerUp.startedPowerUp();
+                timerBar.setValue(counter);
             }
             else{
                 for (int i=0; i<17; i++) { //run method 17 times
@@ -136,11 +142,12 @@ public class MainUI extends javax.swing.JFrame {
                 @Override
                 public void actionPerformed(ActionEvent event) //Delay before the ending page opens
                 {
-                    if (itemClick==2 || pointss==0){
+                    if (itemClick==2 || pointss==0 || counter==0){
                         timer.stop();
                         game.openEnd();
                         itemClick=-1; //initialize in case user replays the game
                         pointss=-1;
+                        gameTimer.stop(); //stop current game timer
                     }
                 }
             };
@@ -162,6 +169,31 @@ public class MainUI extends javax.swing.JFrame {
 
             powerUp.usePowerUp(); //check if the power up button was clicked
             settings.settings(); //Check if the settings buttons were clicked
+            
+            ActionListener timerAction = new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent event) 
+                {
+                    counter--;
+                    timerBar.setValue(counter);
+                    switch (counter) { //warn the user starting when there is 3 seconds left
+                        case 3:
+                            timerText.setText("3 SECONDS LEFT!");
+                            break;
+                        case 2:
+                            timerText.setText("2 SECONDS LEFT!!");
+                            break;
+                        case 1:
+                            timerText.setText("1 SECOND LEFT!!!");
+                            break;
+                        default:
+                            timerText.setText("");
+                            break;
+                    }
+                }
+            };
+            gameTimer= new Timer (1000,timerAction);
+            gameTimer.start();
         }
         }).start();
     }
@@ -185,6 +217,8 @@ public class MainUI extends javax.swing.JFrame {
         dataFile.write(0+"\n");
         dataFile.write("power"+"\n"); //write an initial value for if the user used the power up or not
         dataFile.write("false"+"\n");
+        dataFile.write("timer"+"\n"); //write an initial value for the timer
+        dataFile.write(10+"\n");
         dataFile.close();
     }
     
@@ -242,6 +276,8 @@ public class MainUI extends javax.swing.JFrame {
         helpLabel = new javax.swing.JLabel();
         exitLabel = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
+        timerBar = new javax.swing.JProgressBar();
+        timerText = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(820, 600));
@@ -453,6 +489,16 @@ public class MainUI extends javax.swing.JFrame {
         jLabel37.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 36)); // NOI18N
         jLabel37.setText("~ CAN'T YOU SEE ME? ~");
 
+        timerBar.setBackground(new java.awt.Color(255, 255, 255));
+        timerBar.setForeground(new java.awt.Color(153, 255, 255));
+        timerBar.setMaximum(10);
+        timerBar.setToolTipText("");
+        timerBar.setValue(10);
+
+        timerText.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        timerText.setForeground(new java.awt.Color(255, 0, 0));
+        timerText.setText("TEXT PROGRESS");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -464,40 +510,49 @@ public class MainUI extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel37)
+                        .addGap(62, 62, 62)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(PowerUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(restartLabel)
-                            .addComponent(helpLabel)
-                            .addComponent(exitLabel)))
+                            .addComponent(timerText)
+                            .addComponent(timerBar, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(star1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(star2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(star3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(star4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(star5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(extraStar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(gameText)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 374, Short.MAX_VALUE)))
-                .addGap(25, 25, 25))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel37)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(PowerUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(restartLabel)
+                                    .addComponent(helpLabel)
+                                    .addComponent(exitLabel)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(star1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(star2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(star3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(star4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(star5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(extraStar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(gameText)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 374, Short.MAX_VALUE)))
+                        .addGap(25, 25, 25))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jLabel37)
-                .addGap(25, 25, 25)
+                .addGap(34, 34, 34)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel37)
+                        .addComponent(timerText))
+                    .addComponent(timerBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(gameText)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -628,5 +683,7 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JLabel star3;
     private javax.swing.JLabel star4;
     private javax.swing.JLabel star5;
+    private javax.swing.JProgressBar timerBar;
+    private javax.swing.JLabel timerText;
     // End of variables declaration//GEN-END:variables
 }
