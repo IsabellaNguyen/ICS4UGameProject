@@ -27,8 +27,9 @@ public class EndingPage extends javax.swing.JFrame {
      */
     public EndingPage(int points, boolean usedPowerUp, int counter) {
         initComponents();
+        this.setLocationRelativeTo(null);
         JLabel[] stars = {star1,star2,star3, star4, star5};
-        if (points==0 || counter==0){ //User lost the game
+        if (points==0 || counter==-1){ //User lost the game
             image.setIcon(sadEnding);
             image.setText("");
             title.setText("Try Again");
@@ -36,15 +37,24 @@ public class EndingPage extends javax.swing.JFrame {
         else{ //User won the game
             title.setText("Congratulations!");
         }
+        switch (counter) { //show the amount of seconds remained
+            case -1: 
+                timeLeftText.setText("You ran out of time!");
+                break;
+            case 1:
+                timeLeftText.setText("Time left: "+counter+" second"); //make it not plural it looks better
+                break;
+            default: 
+                timeLeftText.setText("Time left: "+counter+" seconds");
+                break;
+        }
         for (int i=4 ; i>points-1 ; i--){ //set all the stars to the correct points
             stars[i].setIcon(noStarImage);
         }
-        if (usedPowerUp || points==0 || counter==0){ //set the bonus star to empty if the user used the power up or lost
+        if (usedPowerUp || points==0 || counter==-1){ //set the bonus star to empty if the user used the power up or lost
           bonusStar.setIcon(noBonus);
           bonusText.setText("No bonus star :(");
         }
-        
-        
     }
 
     private EndingPage() {
@@ -72,6 +82,7 @@ public class EndingPage extends javax.swing.JFrame {
         exitButton = new javax.swing.JButton();
         bonusStar = new javax.swing.JLabel();
         bonusText = new javax.swing.JLabel();
+        timeLeftText = new javax.swing.JLabel();
         title = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -118,6 +129,9 @@ public class EndingPage extends javax.swing.JFrame {
         bonusText.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         bonusText.setText("+ One Bonus Star!");
 
+        timeLeftText.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        timeLeftText.setText("Time Left Text");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -127,8 +141,10 @@ public class EndingPage extends javax.swing.JFrame {
                 .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bonusStar, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bonusText, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(bonusText, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(timeLeftText)
+                        .addComponent(bonusStar)))
                 .addContainerGap(167, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -169,7 +185,9 @@ public class EndingPage extends javax.swing.JFrame {
                         .addGap(67, 67, 67)
                         .addComponent(bonusText)
                         .addGap(18, 18, 18)
-                        .addComponent(bonusStar))
+                        .addComponent(bonusStar)
+                        .addGap(18, 18, 18)
+                        .addComponent(timeLeftText))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(33, 33, 33)
                         .addComponent(image, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -280,6 +298,7 @@ public class EndingPage extends javax.swing.JFrame {
     private javax.swing.JLabel star3;
     private javax.swing.JLabel star4;
     private javax.swing.JLabel star5;
+    private javax.swing.JLabel timeLeftText;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 }

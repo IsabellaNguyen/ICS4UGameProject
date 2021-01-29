@@ -16,6 +16,7 @@ public class TitlePage extends javax.swing.JFrame {
      */
     public TitlePage() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

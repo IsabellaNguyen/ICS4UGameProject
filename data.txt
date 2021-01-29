@@ -1,4 +1,4 @@
 points
-1
+6
 power
-true
+false

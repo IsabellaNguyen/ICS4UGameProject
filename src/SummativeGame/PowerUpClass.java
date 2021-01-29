@@ -95,7 +95,8 @@ public class PowerUpClass {
                         }
                         else{
                             items[randItem].setIcon(icons[answers.get(randItem)]); //set icon
-                            alrClicked.set(randItem,true);
+                            alrClicked.set(randItem,true); //set already clicked
+                            SettingsClass.alrClicked=alrClicked;
                         }
                     }
                 }

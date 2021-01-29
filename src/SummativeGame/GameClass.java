@@ -28,21 +28,27 @@ import javax.swing.JLabel;
  * @author bella
  */
 public class GameClass {
-    private ArrayList<Integer> answers = new ArrayList(); //instance variables
+    ///// Instance Variables /////
+    private ArrayList<Integer> answers = new ArrayList();
     private ArrayList<Boolean> alrClicked = new ArrayList();
     private final JLabel[] items;
     private final ImageIcon[] icons;
     private final JLabel[] stars;
     private final JLabel text;
     private final JLabel extraStar;
+    ////////////////////////////
     
-    int numOfCorrect, numOfPresent, numOfEvil; //other variables
+    ///// Variables /////
+    int numOfCorrect, numOfPresent, numOfEvil;
     int correctItem=0;
     int correct=0;
     int points=5;
     int present=6;
     int evil=7;
     static boolean used,isEvil=false;
+    ////////////////////
+    
+    ///// Image Declarations /////
     java.net.URL backURL = GameClass.class.getResource("ImageOnBackk.png");
     ImageIcon backIcon = new ImageIcon(backURL);
     java.net.URL noStarURL = GameClass.class.getResource("noStarImage.png");
@@ -51,6 +57,7 @@ public class GameClass {
     ImageIcon star = new ImageIcon(starURL);
     java.net.URL backMouseURL = GameClass.class.getResource("ImageOnBackDark.png");
     ImageIcon backMouse = new ImageIcon(backMouseURL);
+    /////////////////////////////
     
     public GameClass(JLabel[] items, ArrayList answers, ArrayList alrClicked, ImageIcon[] icons, JLabel[] stars, JLabel text, JLabel extraStar){
         this.items=items;
@@ -60,23 +67,24 @@ public class GameClass {
         this.stars=stars;
         this.text=text;
         this.extraStar=extraStar;
-        
+        ///// initalize the necessary variables via text file /////
         File file = new File("data.txt"); 
         Scanner scan;
         try {
             scan = new Scanner(file);
             while (scan.hasNextLine()){
                 String str = scan.nextLine();
-                if (str.equals("points")){ //initalize the necessary variables via text file
-                    points=scan.nextInt();
+                if (str.equals("points")){
+                    points=scan.nextInt(); //initialize points
                 }
                 else if (str.equals("correct")){
-                    correct=scan.nextInt();
+                    correct=scan.nextInt(); //initialize correct number of items chosen by user already
                 }
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        /////////////////////////////////////////////////////////
     }
     
     public void randomizeAnswers() {
@@ -115,10 +123,10 @@ public class GameClass {
         switch (numOfCorrect){ 
             case(0): //In the rare case the random generator does not include any correct items
               int place=rand.nextInt(30);
-                answers.set(place, 0); 
+              answers.set(place, 0); 
             case(1): //In case random generator includes only one correct item (also used to add another correct item if the code passed through case(0))
-                int place2=rand.nextInt(30);
-                answers.set(place2, 0);
+              int place2=rand.nextInt(30);
+              answers.set(place2, 0);
         }
 
         for(int i=0;i<items.length;i++){ //display the answers
@@ -133,7 +141,7 @@ public class GameClass {
         SettingsClass.correct=correct;
     }
     
-    public void coverItems(){ //Cover items with square
+    public void coverItems(){ //Cover items with squares
         for (JLabel item : items) {
             item.setIcon(backIcon);
         }
@@ -141,7 +149,11 @@ public class GameClass {
     }
     
     public void userPicksItem(){ //determine which item is clicked
-        extraStar.setVisible(false);
+        if (points==6){
+        } else {
+            extraStar.setVisible(false); //hide the extra star if the user does not have 6 points
+        }
+        
         for (int i=0 ; i<items.length ; i++){ //scan each item
             final int p=i;
             items[i].addMouseListener(new MouseAdapter() {
@@ -275,7 +287,7 @@ public class GameClass {
         for (Window window1 : window) {
             window1.dispose();
         } 
-        if (MainUI.counter==0){ //it's quicker to set points to 0 here so the ending page shows zero stars instead of changing the code in the EndingPage
+        if (MainUI.counter==-1){ //it's quicker to set points to 0 here so the ending page shows zero stars instead of changing the code in the EndingPage
             points=0;
         }
         EndingPage endingPage = new EndingPage(points, used, MainUI.counter); //open ending page

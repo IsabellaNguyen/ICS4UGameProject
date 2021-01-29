@@ -1,11 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This holds the JFrame of the game page along with all its components. 
+ * What the game is: The screen will show 30 items and mix them up very fast.
+ * You must find the correct items (2) before the timer runs out or you run out of moves.
  */
 package SummativeGame;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -21,16 +20,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 
 /**
  *
  * @author bella
  */
 public class MainUI extends javax.swing.JFrame {
+    ///// Image Declarations /////
     java.net.URL correctItemURL = MainUI.class.getResource("KoyaEarr.png"); //image URL
     ImageIcon correctIcon = new ImageIcon(correctItemURL); //Creating image icon variable
     java.net.URL imageURL1 = MainUI.class.getResource("Chimmy.png");
@@ -49,27 +47,32 @@ public class MainUI extends javax.swing.JFrame {
     ImageIcon evil = new ImageIcon(imageURL7);
     java.net.URL noStarURL = GameClass.class.getResource("noStarImage.png");
     ImageIcon noStarImage = new ImageIcon(noStarURL);
+    ////////////////////////////
     
+    ///// Variables /////
     ArrayList<Integer> answers = new ArrayList();
     ArrayList<Boolean> clicked=new ArrayList();
     boolean usedPowerUp=false;
     static boolean evilK, started=false;
     static int itemClick=-1;
     static int pointss=-1;
-    static int counter=10;
+    static int counter=7;
     Timer timer,eTimer;
     static Timer gameTimer;
-    
+    //////////////////
     /**
      * Creates new form GamePage
      */
     public MainUI() {
         initComponents();
+        this.setLocationRelativeTo(null); //open the JFrame in the middle of the screen
+        
+        ///// Initialize any necessary variables /////
         ImageIcon[] images={correctIcon,image1,image2,image3,image4,image5, present, evil}; //array for different types of icons
         JLabel[] items = {item1,item2,item3,item4,item5,item6,item7,item8,item9,item10,item11,item12,item13,item14,item15,item16,item17,item18,item19,item20,item21,item22,item23,item24,item25,item26,item27,item28,item29,item30};
         JLabel[] stars = {star1, star2, star3, star4, star5, extraStar};
         timerText.setText("");
-        
+
         for (int i=0 ; i<items.length ; i++){
             clicked.add(false);
         }
@@ -99,18 +102,22 @@ public class MainUI extends javax.swing.JFrame {
                         answers.add(scan.nextInt()); //update the array
                     }
                 }
-                else if (str.equals("timer")){
+                else if (str.equals("timer")){ //find the line that says "timer" and let counter equa; the following line
                     counter=scan.nextInt();
                 }
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        /////////////////////////////////////
         
+        ///// Instantiation of objects /////
         GameClass game = new GameClass(items, answers,clicked,images, stars, gameText, extraStar);
         PowerUpClass powerUp = new PowerUpClass(clicked, PowerUpButton, items, answers, images, gameText);
         SettingsClass settings = new SettingsClass (restartLabel, helpLabel, exitLabel, this);
+        ///////////////////////////////////
         
+        ///// Main Thread /////
         new Thread(new Runnable() { //Thread to make randomizeAnswers method run and update jPanel inside a for loop
         @Override
         public void run() {
@@ -143,11 +150,15 @@ public class MainUI extends javax.swing.JFrame {
                 public void actionPerformed(ActionEvent event) //Delay before the ending page opens
                 {
                     if (itemClick==2 || pointss==0 || counter==0){
-                        timer.stop();
+                        if (counter==0){
+                            counter=-1; //must set counter to another value or else it might keep opening the ending page until the 600 ms is done
+                        }
+                        timer.stop(); //stop all the current timers so they don't run in the background unnecessarily
+                        eTimer.stop();
+                        gameTimer.stop(); 
                         game.openEnd();
                         itemClick=-1; //initialize in case user replays the game
                         pointss=-1;
-                        gameTimer.stop(); //stop current game timer
                     }
                 }
             };
@@ -159,7 +170,6 @@ public class MainUI extends javax.swing.JFrame {
                 public void actionPerformed(ActionEvent event) //delay before items are covered again after evil item is chosen
                 {
                     if (evilK==true){
-                        eTimer.restart();
                         game.coverItems();
                     }
                 }
@@ -196,8 +206,10 @@ public class MainUI extends javax.swing.JFrame {
             gameTimer.start();
         }
         }).start();
+        /////////////////////////
     }
     
+    ///// Methods /////
     private void text() throws IOException {
         BufferedWriter dataFile = new BufferedWriter(new FileWriter("data.txt",true));
         BufferedWriter data = Files.newBufferedWriter(Paths.get("data.txt"));
@@ -218,7 +230,7 @@ public class MainUI extends javax.swing.JFrame {
         dataFile.write("power"+"\n"); //write an initial value for if the user used the power up or not
         dataFile.write("false"+"\n");
         dataFile.write("timer"+"\n"); //write an initial value for the timer
-        dataFile.write(10+"\n");
+        dataFile.write(7+"\n");
         dataFile.close();
     }
     
@@ -491,9 +503,9 @@ public class MainUI extends javax.swing.JFrame {
 
         timerBar.setBackground(new java.awt.Color(255, 255, 255));
         timerBar.setForeground(new java.awt.Color(153, 255, 255));
-        timerBar.setMaximum(10);
+        timerBar.setMaximum(7);
         timerBar.setToolTipText("");
-        timerBar.setValue(10);
+        timerBar.setValue(7);
 
         timerText.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         timerText.setForeground(new java.awt.Color(255, 0, 0));
@@ -509,13 +521,6 @@ public class MainUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel37)
-                        .addGap(62, 62, 62)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(timerText)
-                            .addComponent(timerBar, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -541,7 +546,14 @@ public class MainUI extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(gameText)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 374, Short.MAX_VALUE)))
-                        .addGap(25, 25, 25))))
+                        .addGap(25, 25, 25))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel37)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(timerText)
+                            .addComponent(timerBar, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(49, 49, 49))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -21,6 +21,7 @@ public class StoryClass extends javax.swing.JFrame {
      */
     public StoryClass() {
         initComponents(); 
+        this.setLocationRelativeTo(null);
     }
 
     /**

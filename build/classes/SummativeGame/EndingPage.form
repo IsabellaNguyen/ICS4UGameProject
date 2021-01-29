@@ -92,8 +92,11 @@
                       <Component id="image" min="-2" pref="239" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="bonusStar" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="bonusText" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                              <Component id="timeLeftText" min="-2" max="-2" attributes="0"/>
+                              <Component id="bonusStar" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace pref="167" max="32767" attributes="0"/>
                   </Group>
@@ -141,6 +144,8 @@
                               <Component id="bonusText" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="bonusStar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="timeLeftText" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
@@ -241,6 +246,14 @@
                   <Font name="Tahoma" size="11" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="+ One Bonus Star!"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="timeLeftText">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="11" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Time Left Text"/>
               </Properties>
             </Component>
           </SubComponents>
