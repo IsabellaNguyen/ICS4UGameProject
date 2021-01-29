@@ -281,7 +281,6 @@ public class MainUI extends javax.swing.JFrame {
         star4 = new javax.swing.JLabel();
         star5 = new javax.swing.JLabel();
         PowerUpButton = new javax.swing.JButton();
-        jLabel36 = new javax.swing.JLabel();
         gameText = new javax.swing.JLabel();
         extraStar = new javax.swing.JLabel();
         restartLabel = new javax.swing.JLabel();
@@ -290,9 +289,9 @@ public class MainUI extends javax.swing.JFrame {
         jLabel37 = new javax.swing.JLabel();
         timerBar = new javax.swing.JProgressBar();
         timerText = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(820, 600));
         setMinimumSize(new java.awt.Dimension(820, 600));
 
         jPanel1.setBackground(new java.awt.Color(171, 209, 236));
@@ -482,8 +481,6 @@ public class MainUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel36.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/pixlr-bg-result.png"))); // NOI18N
-
         gameText.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         gameText.setText("TEXT");
 
@@ -511,13 +508,12 @@ public class MainUI extends javax.swing.JFrame {
         timerText.setForeground(new java.awt.Color(255, 0, 0));
         timerText.setText("TEXT PROGRESS");
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SummativeGame/gamePageImg.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel36)
-                .addContainerGap(115, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -554,6 +550,9 @@ public class MainUI extends javax.swing.JFrame {
                             .addComponent(timerText)
                             .addComponent(timerBar, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(49, 49, 49))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -587,7 +586,7 @@ public class MainUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(exitLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
-                .addComponent(jLabel36))
+                .addComponent(jLabel1))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -685,7 +684,7 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JLabel item7;
     private javax.swing.JLabel item8;
     private javax.swing.JLabel item9;
-    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
